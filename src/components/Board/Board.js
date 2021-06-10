@@ -5,7 +5,7 @@ function Board() {
   const [spaces, setSpaces] = useState(new Array(9).fill(""));
   const [gameStarted, setGameStarted] = useState(false);
   const [switchPlayer, setSwitchPlayer] = useState(false);
-
+  const [winner, setWinner] = useState("");
   const nextPlayer = () => {
     if (switchPlayer) return "X";
     return "O";
@@ -19,27 +19,60 @@ function Board() {
     }
   };
   const setSpaceValue = (indexSpace) => {
-    if (!gameStarted) {
-      setGameStarted(true);
-    }
-    if (!spaces[indexSpace]) {
-      let newSpaces = [...spaces];
-      newSpaces[indexSpace] = nextPlayer();
-      setSpaces(newSpaces);
-      switchNextPlayer();
+    if (!winner) {
+      if (!gameStarted) {
+        setGameStarted(true);
+      }
+      if (!spaces[indexSpace]) {
+        let newSpaces = [...spaces];
+        newSpaces[indexSpace] = nextPlayer();
+        setSpaces(newSpaces);
+        hasGameEnded(newSpaces);
+        switchNextPlayer();
+      }
     }
   };
 
+  const hasGameEnded = (board) => {
+    const possibleWins = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+    ];
+
+    possibleWins.map((current) => {
+      if (
+        board[current[0]] &&
+        board[current[0]] === board[current[1]] &&
+        board[current[1]] === board[current[2]]
+      ) {
+        setWinner(board[current[0]]);
+        return;
+      }
+    });
+  };
   return (
     <>
       <h1>Board</h1>
-      <b>Next Player: {nextPlayer()}</b>
       {!gameStarted ? (
         <>
-          <br />
           <button onClick={startAsNextPlayer}>Switch Player?</button>
+          <br />
         </>
       ) : null}
+      {winner ? (
+        <>
+          <h1>The game has ended!</h1>
+          <b>Winner: {winner}</b>
+        </>
+      ) : (
+        <b>Next Player: {nextPlayer()}</b>
+      )}
       <div className="board">
         <div className="row1">
           <Space value={spaces[0]} markSquare={() => setSpaceValue(0)} />
