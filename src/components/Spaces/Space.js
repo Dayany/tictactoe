@@ -1,8 +1,8 @@
-function Space({ value }) {
+function Space({ value, markSquare }) {
   return (
-    <div className="space">
+    <button className="space" onClick={markSquare}>
       <spam>{value}</spam>
-    </div>
+    </button>
   );
 }
 
