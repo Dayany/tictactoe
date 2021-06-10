@@ -55,6 +55,17 @@ function Board() {
         return;
       }
     });
+
+    let isElementEmpty = false;
+    board.map((current) => {
+      if (!current) {
+        isElementEmpty = true;
+        return;
+      }
+    });
+    if (!isElementEmpty) {
+      setWinner("None");
+    }
   };
   return (
     <>
