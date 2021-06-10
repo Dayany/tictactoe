@@ -67,6 +67,11 @@ function Board() {
       setWinner("None");
     }
   };
+  const restartGame = () => {
+    setWinner("");
+    setSpaces(new Array(9).fill(""));
+    setGameStarted(false);
+  };
   return (
     <>
       <h1>Board</h1>
@@ -80,6 +85,8 @@ function Board() {
         <>
           <h1>The game has ended!</h1>
           <b>Winner: {winner}</b>
+          <br />
+          <button onClick={restartGame}>Play again?</button>
         </>
       ) : (
         <b>Next Player: {nextPlayer()}</b>
