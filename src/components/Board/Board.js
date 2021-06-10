@@ -3,6 +3,7 @@ import Space from "../Spaces/Space";
 
 function Board() {
   const [spaces, setSpaces] = useState(new Array(9).fill(""));
+  const [gameStarted, setGameStarted] = useState(false);
   const [switchPlayer, setSwitchPlayer] = useState(false);
 
   const nextPlayer = () => {
@@ -12,20 +13,33 @@ function Board() {
   const switchNextPlayer = () => {
     setSwitchPlayer(!switchPlayer);
   };
-
+  const startAsNextPlayer = () => {
+    if (!gameStarted) {
+      switchNextPlayer();
+    }
+  };
   const setSpaceValue = (indexSpace) => {
+    if (!gameStarted) {
+      setGameStarted(true);
+    }
     if (!spaces[indexSpace]) {
       let newSpaces = [...spaces];
-      newSpaces[indexSpace] = switchPlayer ? "X" : "O";
+      newSpaces[indexSpace] = nextPlayer();
       setSpaces(newSpaces);
       switchNextPlayer();
     }
   };
-  console.log(spaces);
+
   return (
     <>
       <h1>Board</h1>
       <b>Next Player: {nextPlayer()}</b>
+      {!gameStarted ? (
+        <>
+          <br />
+          <button onClick={startAsNextPlayer}>Switch Player?</button>
+        </>
+      ) : null}
       <div className="board">
         <div className="row1">
           <Space value={spaces[0]} markSquare={() => setSpaceValue(0)} />
